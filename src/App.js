@@ -5,6 +5,7 @@ import { TodoList } from './TodoList';
 import { CreateTodoButton } from './CreateTodoButton';
 import { TodoItem } from './TodoItem';
 import { TodoForm } from './TodoForm';
+import { useLocalStorage } from './useLocalStorage';
 import './App.css';
 
 const defaultTodos = [
@@ -14,27 +15,13 @@ const defaultTodos = [
 ];
 
 function App() {
-  // Función para obtener todos desde localStorage
-  const getStoredTodos = () => {
-    try {
-      const storedTodos = localStorage.getItem('todos');
-      return storedTodos ? JSON.parse(storedTodos) : defaultTodos;
-    } catch (error) {
-      console.error('Error al cargar todos desde localStorage:', error);
-      return defaultTodos;
-    }
-  };
+  const {
+    item: todos,
+    saveItem: saveTodos,
+    loading,
+    error,
+  } = useLocalStorage('todos', defaultTodos);
 
-  // Función para guardar todos en localStorage
-  const saveTodos = (todosToSave) => {
-    try {
-      localStorage.setItem('todos', JSON.stringify(todosToSave));
-    } catch (error) {
-      console.error('Error al guardar todos en localStorage:', error);
-    }
-  };
-
-  const [todos, setTodos] = React.useState(getStoredTodos);
   const [showModal, setShowModal] = React.useState(false);
   const [searchValue, setSearchValue] = React.useState('');
 
@@ -55,7 +42,6 @@ function App() {
       completed: false
     };
     const updatedTodos = [...todos, newTodo];
-    setTodos(updatedTodos);
     saveTodos(updatedTodos);
   };
 
@@ -66,15 +52,21 @@ function App() {
       }
       return todo;
     });
-    setTodos(newTodos);
     saveTodos(newTodos);
   };
 
   const deleteTodo = (sort) => {
     const newTodos = todos.filter(todo => todo.sort !== sort);
-    setTodos(newTodos);
     saveTodos(newTodos);
   };
+
+  if (loading) {
+    return <div className="App"><p>Cargando...</p></div>;
+  }
+
+  if (error) {
+    return <div className="App"><p>Error al cargar los datos</p></div>;
+  }
 
   return (
     <div className="App">
