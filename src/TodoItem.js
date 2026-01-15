@@ -1,19 +1,17 @@
+import { CompleteIcon } from "./CompleteIcon";
+import { DeleteIcon } from "./DeteleIcon";
+
 function TodoItem({sort, text, completed, onToggle, onDelete}){
   return(
     <li className="TodoItem">
-      <span 
-        className={`Icon Icon-check ${completed && "Icon-check--active"}`}
+      <CompleteIcon 
         onClick={onToggle}
-      >
-        {completed ? "✔" : "❌"}
-      </span>
+        completed={completed}
+      />
       <p className={`TodoItem-p ${completed && "TodoItem-p--complete"}`}>{sort}. {text}</p>
-      <span 
-        className="Icon Icon-delete"
+      <DeleteIcon 
         onClick={onDelete}
-      >
-        X
-      </span>
+      />
     </li>
   )
 }

@@ -14,7 +14,27 @@ const defaultTodos = [
 ];
 
 function App() {
-  const [todos, setTodos] = React.useState(defaultTodos);
+  // Función para obtener todos desde localStorage
+  const getStoredTodos = () => {
+    try {
+      const storedTodos = localStorage.getItem('todos');
+      return storedTodos ? JSON.parse(storedTodos) : defaultTodos;
+    } catch (error) {
+      console.error('Error al cargar todos desde localStorage:', error);
+      return defaultTodos;
+    }
+  };
+
+  // Función para guardar todos en localStorage
+  const saveTodos = (todosToSave) => {
+    try {
+      localStorage.setItem('todos', JSON.stringify(todosToSave));
+    } catch (error) {
+      console.error('Error al guardar todos en localStorage:', error);
+    }
+  };
+
+  const [todos, setTodos] = React.useState(getStoredTodos);
   const [showModal, setShowModal] = React.useState(false);
   const [searchValue, setSearchValue] = React.useState('');
 
@@ -34,7 +54,9 @@ function App() {
       text: text,
       completed: false
     };
-    setTodos([...todos, newTodo]);
+    const updatedTodos = [...todos, newTodo];
+    setTodos(updatedTodos);
+    saveTodos(updatedTodos);
   };
 
   const toggleTodo = (sort) => {
@@ -45,11 +67,13 @@ function App() {
       return todo;
     });
     setTodos(newTodos);
+    saveTodos(newTodos);
   };
 
   const deleteTodo = (sort) => {
     const newTodos = todos.filter(todo => todo.sort !== sort);
     setTodos(newTodos);
+    saveTodos(newTodos);
   };
 
   return (
