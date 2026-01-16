@@ -1,0 +1,28 @@
+/* Icons */
+.Icon {
+  cursor: pointer;
+  font-size: 20px;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.Icon-svg {
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
+}
+
+.Icon-check {
+  color: #ccc;
+}
+
+.Icon-check--active {
+  color: #4caf50;
+  font-weight: bold;
+}
+
+.Icon-check:hover {
+  transform: scale(1.2);
+}

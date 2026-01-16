@@ -1,6 +1,6 @@
 import React from "react";
 import {ReactComponent  as CheckIcon} from "./check.svg";
-import "./TodoIcon.css";
+import "./CompleteIcon.css";
 
 function CompleteIcon({onClick, completed}) {
     return(

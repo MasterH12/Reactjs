@@ -1,6 +1,6 @@
 import React from "react";
 import {ReactComponent  as DeleteIconSVG} from "./delete.svg";
-import "./TodoIcon.css";
+import "./DeleteIcon.css";
 
 function DeleteIcon({onClick}) {
     return(

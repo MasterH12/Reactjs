@@ -1,4 +1,3 @@
-
 /* Icons */
 .Icon {
   cursor: pointer;
@@ -13,19 +12,6 @@
   width: 24px;
   height: 24px;
   fill: currentColor;
-}
-
-.Icon-check {
-  color: #ccc;
-}
-
-.Icon-check--active {
-  color: #4caf50;
-  font-weight: bold;
-}
-
-.Icon-check:hover {
-  transform: scale(1.2);
 }
 
 .Icon-delete {
