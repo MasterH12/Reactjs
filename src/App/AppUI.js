@@ -5,61 +5,56 @@ import { TodoList } from '../TodoList';
 import { CreateTodoButton } from '../CreateTodoButton';
 import { TodoItem } from '../TodoItem';
 import { TodoForm } from '../TodoForm';
+import { TodosLoading } from '../TodosLoading';
+
+import { TodoContext } from '../TodoContext';
 
 function AppUI({
-  loading,
-  error,
-  todos,
-  filteredTodos,
-  searchValue,
-  setSearchValue,
-  showModal,
-  setShowModal,
-  addTodo,
-  toggleTodo,
-  deleteTodo,
 }) {
-  if (loading) {
-    return <div className="App"><p>Cargando...</p></div>;
-  }
-
-  if (error) {
-    return <div className="App"><p>Error al cargar los datos</p></div>;
-  }
-
   return (
     <div className="App">
-      <TodoCounter 
-        completed={todos.filter(todo => todo.completed).length} 
-        total={todos.length} 
-      />
+      <TodoContext.Consumer>
+        { ({ loading,
+              filteredTodos,
+              toggleTodo,
+              deleteTodo,
+              showModal,
+              setShowModal,
+              addTodo }) => (
+          <>
+            <TodoCounter />
 
-      <TodoSearch 
-        searchValue={searchValue}
-        setSearchValue={setSearchValue}
-      />
+            <TodoSearch />
+            <TodoList>
+              {loading ? (
+                <TodosLoading />
+              ) : (
+                filteredTodos.map(todo => (
+                  <TodoItem 
+                    sort={todo.sort} 
+                    text={todo.text} 
+                    completed={todo.completed} 
+                    key={todo.sort}
+                    onToggle={() => toggleTodo(todo.sort)}
+                    onDelete={() => deleteTodo(todo.sort)}
+                  />
+                ))
+              )}
+            </TodoList>
 
-      <TodoList>
-        {filteredTodos.map(todo => (
-          <TodoItem 
-            sort={todo.sort} 
-            text={todo.text} 
-            completed={todo.completed} 
-            key={todo.sort}
-            onToggle={() => toggleTodo(todo.sort)}
-            onDelete={() => deleteTodo(todo.sort)}
-          />
-        ))}
-      </TodoList>
+            <CreateTodoButton onClick={() => setShowModal(true)} />
 
-      <CreateTodoButton onClick={() => setShowModal(true)} />
+            {showModal && (
+              <TodoForm 
+                onClose={() => setShowModal(false)}
+                onAdd={addTodo}
+              />
+            )}
+          </>
+        )}
+      </TodoContext.Consumer>
 
-      {showModal && (
-        <TodoForm 
-          onClose={() => setShowModal(false)}
-          onAdd={addTodo}
-        />
-      )}
+      
     </div>
   );
 }
