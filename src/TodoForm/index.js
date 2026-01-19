@@ -1,18 +1,28 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { TodoContext } from '../TodoContext';
 import './TodoForm.css';
 
-function TodoForm({ onClose, onAdd, children }) {
+function TodoForm() {
+  const { addTodo, setShowModal } = React.useContext(TodoContext);
   const [newTodoText, setNewTodoText] = React.useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (newTodoText.trim()) {
-      onAdd(newTodoText);
+      addTodo(newTodoText);
       setNewTodoText('');
-      onClose();
+      setShowModal(false);
     }
   };
+
+  const onChange = (e) => {
+    setNewTodoText(e.target.value);
+  }
+
+  const onClose = () => {
+    setShowModal(false);
+  }
 
   return ReactDOM.createPortal(
     <div className="Modal-backdrop" onClick={onClose}>
@@ -23,7 +33,7 @@ function TodoForm({ onClose, onAdd, children }) {
             className="Modal-textarea"
             placeholder="Escribe tu nuevo TODO..."
             value={newTodoText}
-            onChange={(e) => setNewTodoText(e.target.value)}
+            onChange={onChange}
             autoFocus
           />
           <div className="Modal-buttons">
