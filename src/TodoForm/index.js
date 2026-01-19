@@ -1,7 +1,8 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import './TodoForm.css';
 
-function TodoForm({ onClose, onAdd }) {
+function TodoForm({ onClose, onAdd, children }) {
   const [newTodoText, setNewTodoText] = React.useState('');
 
   const handleSubmit = (e) => {
@@ -13,7 +14,7 @@ function TodoForm({ onClose, onAdd }) {
     }
   };
 
-  return (
+  return ReactDOM.createPortal(
     <div className="Modal-backdrop" onClick={onClose}>
       <div className="Modal-content" onClick={(e) => e.stopPropagation()}>
         <h2 className="Modal-title">Crear nuevo TODO</h2>
@@ -43,7 +44,7 @@ function TodoForm({ onClose, onAdd }) {
         </form>
       </div>
     </div>
-  );
+  , document.getElementById('modal'));
 }
 
 export { TodoForm };
